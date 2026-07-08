@@ -15,10 +15,21 @@ until php artisan db:show > /dev/null 2>&1; do
     sleep 2
 done
 
+LOCK_FILE="/app/backend/storage/app/.seeded"
+
+# echo "Limpando todo o banco de dados e removendo arquivo .seeded"
+# php artisan db:wipe
+# rm "$LOCK_FILE"
+
 echo "Banco de dados conectado. Rodando migrations..."
 php artisan migrate --force
 
-echo "Rodando seeders..."
-php artisan db:seed --force
+if [ ! -f "$LOCK_FILE" ]; then
+    echo "Primeira execução detectada. Rodando seeders..."
+    php artisan db:seed --force
+    touch "$LOCK_FILE"
+else
+    echo "Seeders já executados."
+fi
 
 exec "$@"
