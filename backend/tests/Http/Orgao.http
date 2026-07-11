@@ -2,7 +2,6 @@
 @baseUrl = http://localhost:8000
 @jwtToken = {{loginRequest.response.body.*}}
 
-
 ### Login
 # @name loginRequest
 POST {{baseUrl}}/api/auth/login
@@ -13,12 +12,10 @@ Content-Type: application/json
     "password": "orcamento@2026"
 }
 
-
-### Rota para testar autenticação
-GET {{baseUrl}}/api/teste
-Authorization: Bearer {{jwtToken}}
-
-
-### Logout
-POST {{baseUrl}}/api/auth/logout
+### GET /orgaos
+GET {{baseUrl}}/api/orgaos
+    ?busca=secretaria
+    &ativo=true
+    &per_page=3
+    &page=2
 Authorization: Bearer {{jwtToken}}

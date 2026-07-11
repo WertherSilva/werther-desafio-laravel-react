@@ -16,7 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Garantir que a acentuação venha visivelmente correta (unescaped) nos JSONs
+        $middleware->appendToGroup('api', \App\Http\Middleware\ForceJsonUnescaped::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (AuthenticationException $e, $request) {
