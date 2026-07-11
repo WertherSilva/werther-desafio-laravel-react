@@ -17,8 +17,10 @@ Content-Type: application/json
 ### Rota para testar autenticação
 GET {{baseUrl}}/api/teste
 Authorization: Bearer {{jwtToken}}
+Accept: application/json
 
 
 ### Logout
 POST {{baseUrl}}/api/auth/logout
 Authorization: Bearer {{jwtToken}}
+Accept: application/json

@@ -15,7 +15,8 @@ Content-Type: application/json
 ### GET /orgaos
 GET {{baseUrl}}/api/orgaos
     ?busca=secretaria
-    &ativo=true
-    &per_page=3
-    &page=2
+    &ativo=false
+    &per_page=5
+    &page=1
 Authorization: Bearer {{jwtToken}}
+Accept: application/json

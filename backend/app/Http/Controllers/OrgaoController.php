@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\OrgaoService;
 use App\Http\Resources\OrgaoResource;
-use Illuminate\Http\Request;
+use App\Http\Requests\OrgaoSearchRequest;
 
 class OrgaoController extends Controller
 {
@@ -12,9 +12,9 @@ class OrgaoController extends Controller
         protected OrgaoService $orgaoService
     ) {}
 
-    public function search(Request $request)
+    public function search(OrgaoSearchRequest $request)
     {
-        $filters = $request->all();
+        $filters = $request->validated();
         $result = $this->orgaoService->search($filters);
 
         // Utilizado Resource para ter controle do que expor do modelo
