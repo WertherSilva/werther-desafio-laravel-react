@@ -30,11 +30,11 @@ class OrgaoSearchRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'ativo.boolean'    => 'O campo ativo deve ser true ou false.',
+            'ativo.boolean'     => 'O campo ativo deve ser true ou false.',
             'per_page.required' => 'Campo per_page não encontrado.',
-            'per_page.integer' => 'O campo per_page deve ser um número inteiro.',
-            'per_page.min'     => 'O campo per_page deve ser maior que 1.',
-            'per_page.max'     => 'O campo per_page deve ser menor que 100.',
+            'per_page.integer'  => 'O campo per_page deve ser um número inteiro.',
+            'per_page.min'      => 'O campo per_page deve ser maior que 1.',
+            'per_page.max'      => 'O campo per_page deve ser menor que 100.',
         ];
     }
 }

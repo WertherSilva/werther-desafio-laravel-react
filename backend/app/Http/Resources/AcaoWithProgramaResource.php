@@ -5,15 +5,16 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrgaoResource extends JsonResource
+class AcaoWithProgramaResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'sigla' => $this->sigla,
+            'codigo' => $this->codigo,
             'nome' => $this->nome,
-            'ativo' => $this->ativo,
+            'programa_id' => $this->programa_id,
+            'programa' => new ProgramaResource($this->whenLoaded('programa')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

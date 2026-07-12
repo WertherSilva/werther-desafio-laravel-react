@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrcamentoStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class Orcamento extends Model
 {
@@ -33,6 +35,10 @@ class Orcamento extends Model
         'revisado_em',
     ];
 
+    // protected $appends= [
+    //     'dotacao_atualizada'
+    // ];
+
     protected function casts(): array
     {
         return [
@@ -47,12 +53,12 @@ class Orcamento extends Model
         ];
     }
 
-    protected function dotacaoAtualizada(): Attribute
-    {
-        return Attribute::get(function (): float {
-                return $this->dotacao_inicial + $this->suplementacoes - $this->anulacoes;
-        });
-    }
+    // protected function dotacaoAtualizada(): Attribute
+    // {
+    //     return Attribute::get(function (): float {
+    //             return round($this->dotacao_inicial + $this->suplementacoes - $this->anulacoes, 2);
+    //     });
+    // }
 
     public function unidadeGestora(): BelongsTo
     {
@@ -80,10 +86,10 @@ class Orcamento extends Model
     {
         return $this->hasOneThrough(
             Programa::class,
-            UnidadeGestora::class,
+            Acao::class,
             'id',
             'id',
-            'unidade_gestora_id',
+            'acao_id',
             'programa_id'
         );
     }
@@ -128,8 +134,51 @@ class Orcamento extends Model
     #[Scope]
     public function withDotacaoAtualizada(Builder $query): void
     {
-        $query->selectRaw(
-            '(dotacao_inicial + suplementacoes - anulacoes) as dotacao_atualizada'
-        );
+        $query->addSelect([
+            'dotacao_atualizada' => DB::raw('(dotacao_inicial + suplementacoes - anulacoes)')
+        ]);
+    }
+
+    #[Scope]
+    public function porOrgao(Builder $query, int $orgaoId): void
+    {
+        $query->whereHas('orgao', fn($q) => $q->where('orgaos.id', $orgaoId));
+    }
+
+    #[Scope]
+    public function porPrograma(Builder $query, int $programaId): void
+    {
+        $query->whereHas('programa', fn($q) => $q->where('programas.id', $programaId));
+    }
+
+    #[Scope]
+    public function porStatus(Builder $query, OrcamentoStatus $status): void
+    {
+        match ($status) {
+            OrcamentoStatus::PAGO => $query->where('valor_pago', '>', 0)
+                ->whereColumn('valor_pago', '>=', 'valor_liquidado'),
+
+            OrcamentoStatus::LIQUIDADO => $query->where('valor_liquidado', '>', 0)
+                ->whereColumn('valor_pago', '<', 'valor_liquidado'),
+
+            OrcamentoStatus::EMPENHADO => $query->where('valor_empenhado', '>', 0)
+                ->where('valor_liquidado', '=', 0),
+        };
+    }
+
+    #[Scope]
+    public function porPercentualExecucao(Builder $query, ?float $min = null, ?float $max = null): void
+    {
+        $formula = '(dotacao_inicial + suplementacoes - anulacoes)';
+
+        if ($min !== null) {
+            $fatorMin = $min / 100;
+            $query->whereRaw("valor_empenhado >= ? * $formula", [$fatorMin]);
+        }
+
+        if ($max !== null) {
+            $fatorMax = $max / 100;
+            $query->whereRaw("valor_empenhado <= ? * $formula", [$fatorMax]);
+        }
     }
 }

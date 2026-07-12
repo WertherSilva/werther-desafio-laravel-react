@@ -5,15 +5,15 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrgaoResource extends JsonResource
+class UnidadeGestoraWithOrgaoResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'sigla' => $this->sigla,
             'nome' => $this->nome,
-            'ativo' => $this->ativo,
+            'orgao_id' => $this->orgao_id,
+            'orgao' => new OrgaoResource($this->whenLoaded('orgao')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

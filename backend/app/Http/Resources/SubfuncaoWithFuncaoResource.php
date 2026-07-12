@@ -5,15 +5,15 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrgaoResource extends JsonResource
+class SubfuncaoWithFuncaoResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'sigla' => $this->sigla,
             'nome' => $this->nome,
-            'ativo' => $this->ativo,
+            'funcao_id' => $this->funcao_id,
+            'funcao' => new FuncaoResource($this->whenLoaded('funcao')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
