@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 
 class Orcamento extends Model
 {
@@ -14,7 +17,6 @@ class Orcamento extends Model
         'dotacao_inicial',
         'suplementacoes',
         'anulacoes',
-        'dotacao_atualizada',
         'valor_empenhado',
         'valor_liquidado',
         'valor_pago',
@@ -35,12 +37,18 @@ class Orcamento extends Model
             'dotacao_inicial' => 'decimal:2',
             'suplementacoes' => 'decimal:2',
             'anulacoes' => 'decimal:2',
-            'dotacao_atualizada' => 'decimal:2',
             'valor_empenhado' => 'decimal:2',
             'valor_liquidado' => 'decimal:2',
             'valor_pago' => 'decimal:2',
             'revisado_em' => 'datetime',
         ];
+    }
+
+    protected function dotacaoAtualizada(): Attribute
+    {
+        return Attribute::get(function (): float {
+                return $this->dotacao_inicial + $this->suplementacoes - $this->anulacoes;
+        });
     }
 
     public function unidadeGestora(): BelongsTo
@@ -112,5 +120,13 @@ class Orcamento extends Model
     public function contratos(): HasMany
     {
         return $this->hasMany(Contrato::class);
+    }
+
+    #[Scope]
+    public function withDotacaoAtualizada(Builder $query): void
+    {
+        $query->selectRaw(
+            '(dotacao_inicial + suplementacoes - anulacoes) as dotacao_atualizada'
+        );
     }
 }
