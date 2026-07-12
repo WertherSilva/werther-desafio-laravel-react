@@ -4,8 +4,8 @@ namespace App\Enums;
 
 enum ContratoStatus: string
 {
-    case Vigente = 'vigente';
-    case Vencido = 'vencido';
-    case Encerrado = 'encerrado';
-    case Suspenso = 'suspenso';
+    case VIGENTE = 'vigente';
+    case VENCIDO = 'vencido';
+    case ENCERRADO = 'encerrado';
+    case SUSPENSO = 'suspenso';
 }

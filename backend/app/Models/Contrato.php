@@ -45,20 +45,20 @@ class Contrato extends Model
     {
         return Attribute::get(function (): ContratoStatus {
             if ($this->encerrado_em !== null) {
-                return ContratoStatus::Encerrado;
+                return ContratoStatus::ENCERRADO;
             }
 
             if ($this->suspenso_em !== null) {
-                return ContratoStatus::Suspenso;
+                return ContratoStatus::SUSPENSO;
             }
 
             $hoje = Carbon::today();
 
             if ($this->data_fim !== null && $this->data_fim->lt($hoje)) {
-                return ContratoStatus::Vencido;
+                return ContratoStatus::VENCIDO;
             }
 
-            return ContratoStatus::Vigente;
+            return ContratoStatus::VIGENTE;
         });
     }
 
