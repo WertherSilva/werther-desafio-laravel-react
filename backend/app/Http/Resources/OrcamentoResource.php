@@ -19,13 +19,14 @@ class OrcamentoResource extends JsonResource
             'valor_empenhado' => $this->valor_empenhado,
             'valor_liquidado' => $this->valor_liquidado,
             'valor_pago' => $this->valor_pago,
-            'revisado_em' => $this->revisado_em,
             'unidade_gestora' => new UnidadeGestoraWithOrgaoResource($this->whenLoaded('unidadeGestora')),
             'acao' => new AcaoWithProgramaResource($this->whenLoaded('acao')),
             'subfuncao' => new SubfuncaoWithFuncaoResource($this->whenLoaded('subfuncao')),
             'natureza_despesa' => new NaturezaDespesaResource($this->whenLoaded('naturezaDespesa')),
             'fonte_recurso' => new FonteRecursoResource($this->whenLoaded('fonteRecurso')),
             'revisor' => new UserResource($this->whenLoaded('revisor')),
+            'revisado_em' => $this->revisado_em,
+            'observacao_revisao' => $this->observacao_revisao,
         ];
     }
 }

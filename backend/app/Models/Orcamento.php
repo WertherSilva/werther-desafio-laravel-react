@@ -135,7 +135,8 @@ class Orcamento extends Model
     public function withDotacaoAtualizada(Builder $query): void
     {
         $query->addSelect([
-            'dotacao_atualizada' => DB::raw('(dotacao_inicial + suplementacoes - anulacoes)')
+            'orcamentos.*',
+            DB::raw('(dotacao_inicial + suplementacoes - anulacoes) as dotacao_atualizada'),
         ]);
     }
 
