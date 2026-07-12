@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,6 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Orcamento extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'ano',
         'dotacao_inicial',
@@ -20,14 +23,14 @@ class Orcamento extends Model
         'valor_empenhado',
         'valor_liquidado',
         'valor_pago',
-        'orgao_id',
+        'observacao_revisao',
         'unidade_gestora_id',
         'acao_id',
         'subfuncao_id',
         'natureza_despesa_id',
         'fonte_recurso_id',
         'revisor_id',
-        'revisado_em'
+        'revisado_em',
     ];
 
     protected function casts(): array
