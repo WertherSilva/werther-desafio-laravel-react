@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrcamentoController;
 use App\Http\Controllers\OrgaoController;
+use App\Http\Controllers\ProgramaController;
 
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -20,4 +21,5 @@ Route::middleware('auth:api')->group(function () {
     });
     Route::get('/orgaos', [OrgaoController::class, 'search']);
     Route::get('/orcamentos', [OrcamentoController::class, 'search']);
+    Route::get('/programas', [ProgramaController::class, 'index']);
 });
