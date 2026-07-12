@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AcaoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrcamentoController;
@@ -22,4 +22,5 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/orgaos', [OrgaoController::class, 'search']);
     Route::get('/orcamentos', [OrcamentoController::class, 'search']);
     Route::get('/programas', [ProgramaController::class, 'index']);
+    Route::get('/acoes', [AcaoController::class, 'index']);
 });
