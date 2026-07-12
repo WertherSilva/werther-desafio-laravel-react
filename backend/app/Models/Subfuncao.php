@@ -11,7 +11,6 @@ class Subfuncao extends Model
     protected $table = 'subfuncoes';
     
     protected $fillable = [
-        'codigo',
         'nome',
         'funcao_id',
     ];
