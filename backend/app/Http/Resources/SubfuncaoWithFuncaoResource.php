@@ -14,8 +14,6 @@ class SubfuncaoWithFuncaoResource extends JsonResource
             'nome' => $this->nome,
             'funcao_id' => $this->funcao_id,
             'funcao' => new FuncaoResource($this->whenLoaded('funcao')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ];
     }
 }

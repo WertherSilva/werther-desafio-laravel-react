@@ -15,8 +15,6 @@ class AcaoWithProgramaResource extends JsonResource
             'nome' => $this->nome,
             'programa_id' => $this->programa_id,
             'programa' => new ProgramaResource($this->whenLoaded('programa')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ];
     }
 }

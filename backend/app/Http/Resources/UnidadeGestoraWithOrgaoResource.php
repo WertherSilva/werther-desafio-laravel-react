@@ -14,8 +14,6 @@ class UnidadeGestoraWithOrgaoResource extends JsonResource
             'nome' => $this->nome,
             'orgao_id' => $this->orgao_id,
             'orgao' => new OrgaoResource($this->whenLoaded('orgao')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ];
     }
 }
