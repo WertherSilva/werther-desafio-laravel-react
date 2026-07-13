@@ -134,9 +134,43 @@ class Orcamento extends Model
     #[Scope]
     public function withDotacaoAtualizada(Builder $query): void
     {
-        $query->addSelect([
-            'orcamentos.*',
-            DB::raw('(dotacao_inicial + suplementacoes - anulacoes) as dotacao_atualizada'),
+        // Se ainda não houver nenhuma seleção, garante o orcamentos.* primeiro
+        if (empty($query->getQuery()->columns)) {
+            $query->select('orcamentos.*');
+        }
+
+        $query->addSelect(DB::raw('(dotacao_inicial + suplementacoes - anulacoes) AS dotacao_atualizada'));
+    }
+
+    #[Scope]
+    public function withStatus(Builder $query): void
+    {
+        if (empty($query->getQuery()->columns)) {
+            $query->select('orcamentos.*');
+        }
+
+        $query->addSelect([DB::raw("
+                CASE
+                    WHEN
+                        valor_empenhado > 0 AND
+                        (valor_liquidado = 0 OR valor_liquidado IS NULL) AND
+                        (valor_pago = 0 OR valor_pago IS NULL)
+                    THEN '" . OrcamentoStatus::EMPENHADO->value . "'
+                    WHEN
+                        valor_liquidado > 0 AND
+                        (
+                            valor_pago < valor_liquidado OR
+                            valor_pago = 0 OR
+                            valor_pago IS NULL
+                        )
+                    THEN '" . OrcamentoStatus::LIQUIDADO->value . "'
+                    WHEN
+                        valor_pago > 0 AND
+                        valor_pago >= valor_liquidado
+                    THEN '" . OrcamentoStatus::PAGO->value . "'
+                    ELSE NULL
+                END AS status
+            ")
         ]);
     }
 

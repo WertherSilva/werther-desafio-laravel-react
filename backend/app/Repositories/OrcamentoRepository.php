@@ -15,6 +15,7 @@ class OrcamentoRepository
     {
         return Orcamento::query()
             ->withDotacaoAtualizada()
+            ->withStatus()
             ->with([
                 'unidadeGestora.orgao',
                 'acao.programa',

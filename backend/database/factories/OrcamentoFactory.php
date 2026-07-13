@@ -44,18 +44,16 @@ class OrcamentoFactory extends Factory
                 null
             );
 
-        $valorPago = $valorLiquidado == null ? $valorLiquidado :
+        $valorPago = $valorLiquidado == null ? null :
             (
                 fake()->boolean(90) ?
-                fake()->randomFloat(2, 0, $valorLiquidado) :
-                (
-                    fake()->boolean(50) ?
-                    fake()->randomFloat(2, $valorLiquidado, $valorLiquidado + 1000000):
+                $valorLiquidado :
+                fake()->randomElement([
+                    fake()->randomFloat(2, 0, $valorLiquidado),
+                    fake()->randomFloat(2, $valorLiquidado, $valorLiquidado + 1000000),
                     null
-                )
+                ])
             );
-        
-        
 
         return [
             'ano' => $ano,

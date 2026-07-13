@@ -20,7 +20,7 @@ GET {{baseUrl}}/api/orcamentos
     &ano=
     &status=
     &percentual_minimo=
-    &percentual_minimo=
+    &percentual_maximo=
     &per_page=10
     &page=1
     &sort_by=
