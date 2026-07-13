@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class Contrato extends Model
 {
@@ -27,10 +28,6 @@ class Contrato extends Model
         'fornecedor_id',
     ];
 
-    protected $appends = [
-        'status'
-    ];
-
     protected function casts(): array
     {
         return [
@@ -41,58 +38,41 @@ class Contrato extends Model
         ];
     }
 
-    protected function status(): Attribute
-    {
-        return Attribute::get(function (): ContratoStatus {
-            if ($this->encerrado_em !== null) {
-                return ContratoStatus::ENCERRADO;
-            }
-
-            if ($this->suspenso_em !== null) {
-                return ContratoStatus::SUSPENSO;
-            }
-
-            $hoje = Carbon::today();
-
-            if ($this->data_fim !== null && $this->data_fim->lt($hoje)) {
-                return ContratoStatus::VENCIDO;
-            }
-
-            return ContratoStatus::VIGENTE;
-        });
-    }
-
     #[Scope]
-    public function encerrado(Builder $query): void
+    public function withStatus(Builder $query): void
     {
-        $query->whereNotNull('encerrado_em');
-    }
+        if (empty($query->getQuery()->columns)) {
+            $query->select('contratos.*');
+        }
 
-    #[Scope]
-    public function suspenso(Builder $query): void
-    {
-        $query->whereNull('encerrado_em')->whereNotNull('suspenso_em');
-    }
+        $hoje = Carbon::today()->toDateString();
 
-    #[Scope]
-    public function vencido(Builder $query): void
-    {
-        $query->whereNull('encerrado_em')
-            ->whereNull('suspenso_em')
-            ->whereNotNull('data_fim')
-            ->where('data_fim', '<', Carbon::today());
-    }
-
-    #[Scope]
-    public function vigente(Builder $query): void
-    {
-        $query->whereNull('encerrado_em')
-            ->whereNull('suspenso_em')
-            ->where(function (Builder $q) {
-                $q->whereNull('data_fim')
-                ->orWhere('data_fim', '>=', Carbon::today());
-            });
-
+        $query->addSelect([DB::raw("
+                CASE
+                    WHEN
+                        encerrado_em IS NOT NULL
+                    THEN '" . ContratoStatus::ENCERRADO->value . "'
+                    WHEN
+                        encerrado_em IS NULL AND
+                        suspenso_em IS NOT NULL
+                    THEN '" . ContratoStatus::SUSPENSO->value . "'
+                    WHEN
+                        encerrado_em IS NULL AND
+                        suspenso_em IS NULL AND
+                        data_fim < '" . $hoje . "'
+                    THEN '" . ContratoStatus::VENCIDO->value . "'
+                    WHEN
+                        encerrado_em IS NULL AND
+                        suspenso_em IS NULL AND
+                        (
+                            data_fim IS NULL OR
+                            data_fim >= '" . $hoje . "'
+                        )
+                    THEN '" . ContratoStatus::VIGENTE->value . "'
+                    ELSE NULL
+                END AS status
+            ")
+        ]);
     }
 
     public function orcamento(): BelongsTo

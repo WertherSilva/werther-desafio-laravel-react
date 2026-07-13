@@ -1,0 +1,25 @@
+### Variables
+@baseUrl = http://localhost:8000
+@jwtToken = {{loginRequest.response.body.*}}
+
+### Login
+# @name loginRequest
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "analista@seplag.rj.gov.br",
+    "password": "orcamento@2026"
+}
+
+### GET /contratos
+GET {{baseUrl}}/api/contratos
+    ?orgao_id=
+    &status=
+    &fornecedor_id=
+    &per_page=10
+    &page=1
+    &sort_by=
+    &sort_direction=
+Authorization: Bearer {{jwtToken}}
+Accept: application/json

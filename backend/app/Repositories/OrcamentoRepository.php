@@ -14,10 +14,6 @@ class OrcamentoRepository
     public function search(array $filters)
     {
         return Orcamento::query()
-            ->withDotacaoAtualizada()
-            ->withPercentualExecucao()
-            ->withStatus()
-            ->withSaldo()
             ->with([
                 'unidadeGestora.orgao',
                 'acao.programa',
@@ -59,10 +55,6 @@ class OrcamentoRepository
     public function findById(int $id)
     {
         return Orcamento::query()
-            ->withDotacaoAtualizada()
-            ->withPercentualExecucao()
-            ->withStatus()
-            ->withSaldo()
             ->with([
                 'unidadeGestora.orgao',
                 'acao.programa',

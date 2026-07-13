@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Orcamento;
 
 use App\Http\Resources\Acao\AcaoWithProgramaResource;
-use App\Http\Resources\ContratoResource;
+use App\Http\Resources\Contrato\ContratoResource;
 use App\Http\Resources\FonteRecursoResource;
 use App\Http\Resources\NaturezaDespesaResource;
 use App\Http\Resources\SubfuncaoWithFuncaoResource;
