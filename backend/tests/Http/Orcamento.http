@@ -27,3 +27,8 @@ GET {{baseUrl}}/api/orcamentos
     &sort_direction=
 Authorization: Bearer {{jwtToken}}
 Accept: application/json
+
+### GET /orcamentos/:id
+GET {{baseUrl}}/api/orcamentos/5000
+Authorization: Bearer {{jwtToken}}
+Accept: application/json

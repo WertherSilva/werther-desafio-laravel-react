@@ -21,6 +21,7 @@ Route::middleware('auth:api')->group(function () {
     });
     Route::get('/orgaos', [OrgaoController::class, 'search']);
     Route::get('/orcamentos', [OrcamentoController::class, 'search']);
+    Route::get('/orcamentos/{id}', [OrcamentoController::class, 'findById'])->whereNumber('id');
     Route::get('/programas', [ProgramaController::class, 'index']);
     Route::get('/acoes', [AcaoController::class, 'index']);
 });

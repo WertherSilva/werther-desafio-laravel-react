@@ -14,4 +14,9 @@ class OrcamentoService
     {
         return $this->orcamentoRepository->search($filters);
     }
+
+    public function findById(int $id): mixed
+    {
+        return $this->orcamentoRepository->findById($id);
+    }
 }

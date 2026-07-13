@@ -1,7 +1,13 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Orcamento;
 
+use App\Http\Resources\Acao\AcaoWithProgramaResource;
+use App\Http\Resources\FonteRecursoResource;
+use App\Http\Resources\NaturezaDespesaResource;
+use App\Http\Resources\SubfuncaoWithFuncaoResource;
+use App\Http\Resources\UnidadeGestoraWithOrgaoResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

@@ -55,4 +55,22 @@ class OrcamentoRepository
             )->orderBy($filters['sort_by'], $filters['sort_direction'])
             ->paginate($filters['per_page']);
     }
+
+    public function findById(int $id)
+    {
+        return Orcamento::query()
+            ->withDotacaoAtualizada()
+            ->withPercentualExecucao()
+            ->withStatus()
+            ->withSaldo()
+            ->with([
+                'unidadeGestora.orgao',
+                'acao.programa',
+                'subfuncao.funcao',
+                'naturezaDespesa',
+                'fonteRecurso',
+                'revisor',
+            ])
+            ->findOrFail($id);
+    }
 }

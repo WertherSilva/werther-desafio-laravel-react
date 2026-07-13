@@ -7,6 +7,7 @@ use Illuminate\Auth\AuthenticationException;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -65,4 +66,11 @@ return Application::configure(basePath: dirname(__DIR__))
                 ],
                 401)->setEncodingOptions(JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         });
+
+        $exceptions->render(function (NotFoundHttpException $e, $request) {
+        return response()->json([
+            'message' => 'Item não encontrado.',
+            'error' => 'item_not_found',
+        ], 404);
+    });
     })->create();

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AcaoService;
-use App\Http\Resources\AcaoResource;
+use App\Http\Resources\Acao\AcaoResource;
 
 class AcaoController extends Controller
 {

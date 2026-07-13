@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\OrcamentoService;
-use App\Http\Resources\OrcamentoResource;
+use App\Http\Resources\Orcamento\OrcamentoResource;
 use App\Http\Requests\OrcamentoSearchRequest;
 
 class OrcamentoController extends Controller
@@ -18,5 +18,12 @@ class OrcamentoController extends Controller
         $result = $this->orcamentoService->search($filters);
 
         return OrcamentoResource::collection($result);
+    }
+
+    public function findById(int $id)
+    {
+        $result = $this->orcamentoService->findById($id);
+        
+        return new OrcamentoResource($result);
     }
 }
