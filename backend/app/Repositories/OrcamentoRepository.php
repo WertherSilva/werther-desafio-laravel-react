@@ -44,14 +44,15 @@ class OrcamentoRepository
             )
             ->when(
                 !empty($filters['status']),
-                fn (Builder $query) => $query->porStatus(OrcamentoStatus::from($filters['status']))
+                fn (Builder $query) => $query->porStatus($filters['status'])
             )
             ->when(
                 isset($filters['percentual_minimo']) || isset($filters['percentual_maximo']),
                 fn (Builder $query) => $query->porPercentualExecucao(
-                    isset($filters['percentual_minimo']) ?? null,
-                    isset($filters['percentual_maximo']) ?? null
+                    $filters['percentual_minimo'] ?? null,
+                    $filters['percentual_maximo'] ?? null
                 )
-            )->paginate($filters['per_page']);
+            )->orderBy($filters['sort_by'], $filters['sort_direction'])
+            ->paginate($filters['per_page']);
     }
 }

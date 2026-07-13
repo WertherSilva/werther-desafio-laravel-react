@@ -21,7 +21,9 @@ GET {{baseUrl}}/api/orcamentos
     &status=
     &percentual_minimo=
     &percentual_minimo=
-    &per_page=3
+    &per_page=10
     &page=1
+    &sort_by=
+    &sort_direction=
 Authorization: Bearer {{jwtToken}}
 Accept: application/json
