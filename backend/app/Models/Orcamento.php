@@ -156,14 +156,26 @@ class Orcamento extends Model
     public function porStatus(Builder $query, OrcamentoStatus $status): void
     {
         match ($status) {
-            OrcamentoStatus::PAGO => $query->where('valor_pago', '>', 0)
+            OrcamentoStatus::EMPENHADO => $query
+                ->where('valor_empenhado', '>', 0)
+                ->where(function (Builder $q) {
+                    $q->where('valor_liquidado', '=', 0)->orWhereNull('valor_liquidado');
+                })
+                ->where(function (Builder $q) {
+                    $q->where('valor_pago', '=', 0)->orWhereNull('valor_pago');
+                }),
+
+            OrcamentoStatus::LIQUIDADO => $query
+            ->where('valor_liquidado', '>', 0)
+            ->where(function (Builder $q) {
+                $q->whereColumn('valor_pago', '<', 'valor_liquidado')
+                  ->orWhere('valor_pago', '=', 0)
+                  ->orWhereNull('valor_pago');
+            }),
+
+            OrcamentoStatus::PAGO => $query
+                ->where('valor_pago', '>', 0)
                 ->whereColumn('valor_pago', '>=', 'valor_liquidado'),
-
-            OrcamentoStatus::LIQUIDADO => $query->where('valor_liquidado', '>', 0)
-                ->whereColumn('valor_pago', '<', 'valor_liquidado'),
-
-            OrcamentoStatus::EMPENHADO => $query->where('valor_empenhado', '>', 0)
-                ->where('valor_liquidado', '=', 0),
         };
     }
 
@@ -172,12 +184,12 @@ class Orcamento extends Model
     {
         $formula = '(dotacao_inicial + suplementacoes - anulacoes)';
 
-        if ($min !== null) {
+        if (isset($min) && !empty($min)) {
             $fatorMin = $min / 100;
             $query->whereRaw("valor_empenhado >= ? * $formula", [$fatorMin]);
         }
 
-        if ($max !== null) {
+        if (isset($max) && !empty($max)) {
             $fatorMax = $max / 100;
             $query->whereRaw("valor_empenhado <= ? * $formula", [$fatorMax]);
         }
