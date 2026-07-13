@@ -40,7 +40,7 @@ class OrcamentoRepository
             )
             ->when(
                 !empty($filters['status']),
-                fn (Builder $query) => $query->porStatus(OrcamentoStatus::from($filters['status']))
+                fn (Builder $query) => $query->having('status', $filters['status'])
             )
             ->when(
                 isset($filters['percentual_minimo']) || isset($filters['percentual_maximo']),

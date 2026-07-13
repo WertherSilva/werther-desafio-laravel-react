@@ -195,33 +195,6 @@ class Orcamento extends Model
     }
 
     #[Scope]
-    public function porStatus(Builder $query, OrcamentoStatus $status): void
-    {
-        match ($status) {
-            OrcamentoStatus::EMPENHADO => $query
-                ->where('valor_empenhado', '>', 0)
-                ->where(function (Builder $q) {
-                    $q->where('valor_liquidado', '=', 0)->orWhereNull('valor_liquidado');
-                })
-                ->where(function (Builder $q) {
-                    $q->where('valor_pago', '=', 0)->orWhereNull('valor_pago');
-                }),
-
-            OrcamentoStatus::LIQUIDADO => $query
-            ->where('valor_liquidado', '>', 0)
-            ->where(function (Builder $q) {
-                $q->whereColumn('valor_pago', '<', 'valor_liquidado')
-                  ->orWhere('valor_pago', '=', 0)
-                  ->orWhereNull('valor_pago');
-            }),
-
-            OrcamentoStatus::PAGO => $query
-                ->where('valor_pago', '>', 0)
-                ->whereColumn('valor_pago', '>=', 'valor_liquidado'),
-        };
-    }
-
-    #[Scope]
     public function porPercentualExecucao(Builder $query, ?float $min = null, ?float $max = null): void
     {
         if (isset($min) && !empty($min)) {

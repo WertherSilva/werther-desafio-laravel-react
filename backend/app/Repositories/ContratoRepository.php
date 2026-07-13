@@ -25,7 +25,7 @@ class ContratoRepository
             )
             ->when(
                 !empty($filters['status']),
-                fn (Builder $query) => $query->where('status', $filters['status'])
+                fn (Builder $query) => $query->having('status', $filters['status'])
             )
             ->when(
                 !empty($filters['fornecedor_id']),
