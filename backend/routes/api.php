@@ -4,6 +4,7 @@ use App\Http\Controllers\AcaoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContratoController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrcamentoController;
 use App\Http\Controllers\OrgaoController;
 use App\Http\Controllers\ProgramaController;
@@ -31,4 +32,5 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/contratos', [ContratoController::class, 'search']);
     Route::get('/programas', [ProgramaController::class, 'index']);
     Route::get('/acoes', [AcaoController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'get']);
 });

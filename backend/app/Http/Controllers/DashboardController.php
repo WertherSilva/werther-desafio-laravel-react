@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\DashboardService;
+
+class DashboardController extends Controller
+{
+    public function __construct(
+        protected DashboardService $dashboardService
+    ) {}
+
+    public function get()
+    {
+        return $this->dashboardService->get();
+    }
+}
