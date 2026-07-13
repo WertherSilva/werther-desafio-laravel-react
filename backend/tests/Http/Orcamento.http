@@ -29,6 +29,6 @@ Authorization: Bearer {{jwtToken}}
 Accept: application/json
 
 ### GET /orcamentos/:id
-GET {{baseUrl}}/api/orcamentos/5000
+GET {{baseUrl}}/api/orcamentos/5
 Authorization: Bearer {{jwtToken}}
 Accept: application/json

@@ -70,6 +70,7 @@ class OrcamentoRepository
                 'naturezaDespesa',
                 'fonteRecurso',
                 'revisor',
+                'contratos'
             ])
             ->findOrFail($id);
     }

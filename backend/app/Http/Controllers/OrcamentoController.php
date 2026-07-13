@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\OrcamentoService;
 use App\Http\Resources\Orcamento\OrcamentoResource;
 use App\Http\Requests\OrcamentoSearchRequest;
+use App\Http\Resources\Orcamento\OrcamentoWithContratosResource;
 
 class OrcamentoController extends Controller
 {
@@ -24,6 +25,6 @@ class OrcamentoController extends Controller
     {
         $result = $this->orcamentoService->findById($id);
         
-        return new OrcamentoResource($result);
+        return new OrcamentoWithContratosResource($result);
     }
 }

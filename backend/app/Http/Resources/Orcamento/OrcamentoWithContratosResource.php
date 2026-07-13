@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Orcamento;
 
 use App\Http\Resources\Acao\AcaoWithProgramaResource;
+use App\Http\Resources\ContratoResource;
 use App\Http\Resources\FonteRecursoResource;
 use App\Http\Resources\NaturezaDespesaResource;
 use App\Http\Resources\SubfuncaoWithFuncaoResource;
@@ -11,7 +12,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrcamentoResource extends JsonResource
+class OrcamentoWithContratosResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
@@ -36,6 +37,7 @@ class OrcamentoResource extends JsonResource
             'revisor' => new UserResource($this->whenLoaded('revisor')),
             'revisado_em' => $this->revisado_em,
             'observacao_revisao' => $this->observacao_revisao,
+            'contratos' => ContratoResource::collection($this->whenLoaded('contratos')),
         ];
     }
 }
