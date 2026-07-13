@@ -174,6 +174,16 @@ class Orcamento extends Model
     }
 
     #[Scope]
+    public function withPercentualExecucao(Builder $query): void
+    {
+        if (empty($query->getQuery()->columns)) {
+            $query->select('orcamentos.*');
+        }
+
+        $query->addSelect(DB::raw('((valor_empenhado / (dotacao_inicial + suplementacoes - anulacoes)) * 100) AS percentual_execucao'));
+    }
+
+    #[Scope]
     public function porOrgao(Builder $query, int $orgaoId): void
     {
         $query->whereHas('orgao', fn($q) => $q->where('orgaos.id', $orgaoId));
@@ -215,16 +225,12 @@ class Orcamento extends Model
     #[Scope]
     public function porPercentualExecucao(Builder $query, ?float $min = null, ?float $max = null): void
     {
-        $formula = '(dotacao_inicial + suplementacoes - anulacoes)';
-
         if (isset($min) && !empty($min)) {
-            $fatorMin = $min / 100;
-            $query->whereRaw("valor_empenhado >= ? * $formula", [$fatorMin]);
+            $query->whereRaw("((valor_empenhado / (dotacao_inicial + suplementacoes - anulacoes)) * 100) >= ?", [$min]);
         }
 
         if (isset($max) && !empty($max)) {
-            $fatorMax = $max / 100;
-            $query->whereRaw("valor_empenhado <= ? * $formula", [$fatorMax]);
+            $query->whereRaw("((valor_empenhado / (dotacao_inicial + suplementacoes - anulacoes)) * 100) <= ?", [$max]);
         }
     }
 }

@@ -15,6 +15,7 @@ class OrcamentoRepository
     {
         return Orcamento::query()
             ->withDotacaoAtualizada()
+            ->withPercentualExecucao()
             ->withStatus()
             ->withSaldo()
             ->with([
