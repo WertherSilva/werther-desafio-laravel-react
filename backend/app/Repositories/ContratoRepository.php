@@ -16,12 +16,15 @@ class ContratoRepository
         return Contrato::query()
             ->withStatus()
             ->with([
-                'orcamento',
+                'orcamento.unidadeGestora.orgao',
                 'fornecedor',
             ])
             ->when(
                 !empty($filters['orgao_id']),
-                fn (Builder $query) => $query->where('orgao_id', $filters['orgao_id'])
+                fn (Builder $query) => $query->whereHas(
+                    'orcamento.unidadeGestora',
+                    fn (Builder $q) => $q->where('orgao_id', $filters['orgao_id'])
+                )
             )
             ->when(
                 !empty($filters['status']),
