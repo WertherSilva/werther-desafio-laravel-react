@@ -35,10 +35,6 @@ class Orcamento extends Model
         'revisado_em',
     ];
 
-    // protected $appends= [
-    //     'dotacao_atualizada'
-    // ];
-
     protected function casts(): array
     {
         return [
@@ -52,13 +48,6 @@ class Orcamento extends Model
             'revisado_em' => 'datetime',
         ];
     }
-
-    // protected function dotacaoAtualizada(): Attribute
-    // {
-    //     return Attribute::get(function (): float {
-    //             return round($this->dotacao_inicial + $this->suplementacoes - $this->anulacoes, 2);
-    //     });
-    // }
 
     public function unidadeGestora(): BelongsTo
     {
@@ -172,6 +161,16 @@ class Orcamento extends Model
                 END AS status
             ")
         ]);
+    }
+
+    #[Scope]
+    public function withSaldo(Builder $query): void
+    {
+        if (empty($query->getQuery()->columns)) {
+            $query->select('orcamentos.*');
+        }
+
+        $query->addSelect(DB::raw('((dotacao_inicial + suplementacoes - anulacoes) - valor_empenhado) AS saldo'));
     }
 
     #[Scope]

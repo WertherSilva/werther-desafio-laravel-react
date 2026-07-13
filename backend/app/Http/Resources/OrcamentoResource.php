@@ -20,6 +20,7 @@ class OrcamentoResource extends JsonResource
             'valor_liquidado' => $this->valor_liquidado,
             'valor_pago' => $this->valor_pago,
             'status' => $this->status,
+            'saldo' => $this->saldo,
             'unidade_gestora' => new UnidadeGestoraWithOrgaoResource($this->whenLoaded('unidadeGestora')),
             'acao' => new AcaoWithProgramaResource($this->whenLoaded('acao')),
             'subfuncao' => new SubfuncaoWithFuncaoResource($this->whenLoaded('subfuncao')),
