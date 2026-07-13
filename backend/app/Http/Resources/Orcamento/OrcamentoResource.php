@@ -28,14 +28,14 @@ class OrcamentoResource extends JsonResource
             'percentual_execucao' => $this->whenHas('percentual_execucao'),
             'status' => $this->whenHas('status'),
             'saldo' => $this->whenHas('saldo'),
+            'revisado_em' => $this->revisado_em,
+            'observacao_revisao' => $this->observacao_revisao,
+            'revisor' => new UserResource($this->whenLoaded('revisor')),
             'unidade_gestora' => new UnidadeGestoraWithOrgaoResource($this->whenLoaded('unidadeGestora')),
             'acao' => new AcaoWithProgramaResource($this->whenLoaded('acao')),
             'subfuncao' => new SubfuncaoWithFuncaoResource($this->whenLoaded('subfuncao')),
             'natureza_despesa' => new NaturezaDespesaResource($this->whenLoaded('naturezaDespesa')),
             'fonte_recurso' => new FonteRecursoResource($this->whenLoaded('fonteRecurso')),
-            'revisor' => new UserResource($this->whenLoaded('revisor')),
-            'revisado_em' => $this->revisado_em,
-            'observacao_revisao' => $this->observacao_revisao,
         ];
     }
 }

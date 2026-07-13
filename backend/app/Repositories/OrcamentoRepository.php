@@ -66,4 +66,24 @@ class OrcamentoRepository
             ])
             ->findOrFail($id);
     }
+
+    public function revisar(int $id, string $observacaoRevisao): Orcamento
+    {
+        $orcamento = Orcamento::query()->findOrFail($id);
+
+        $orcamento->update([
+            'revisor_id' => auth('api')->id(),
+            'revisado_em' => now(),
+            'observacao_revisao' => $observacaoRevisao,
+        ]);
+
+        return $orcamento->fresh([
+            'unidadeGestora.orgao',
+            'acao.programa',
+            'subfuncao.funcao',
+            'naturezaDespesa',
+            'fonteRecurso',
+            'revisor',
+        ]);
+    }
 }

@@ -20,9 +20,14 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/teste', function () {
         return 'se estou vendo isso estou autenticado';
     });
+    
+    Route::prefix('orcamentos')->group(function () {
+        Route::get('/', [OrcamentoController::class, 'search']);
+        Route::get('/{id}', [OrcamentoController::class, 'findById'])->whereNumber('id');
+        Route::patch('/{id}/revisao', [OrcamentoController::class, 'revisar'])->whereNumber('id');
+    });
+        
     Route::get('/orgaos', [OrgaoController::class, 'search']);
-    Route::get('/orcamentos', [OrcamentoController::class, 'search']);
-    Route::get('/orcamentos/{id}', [OrcamentoController::class, 'findById'])->whereNumber('id');
     Route::get('/contratos', [ContratoController::class, 'search']);
     Route::get('/programas', [ProgramaController::class, 'index']);
     Route::get('/acoes', [AcaoController::class, 'index']);

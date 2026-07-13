@@ -19,4 +19,9 @@ class OrcamentoService
     {
         return $this->orcamentoRepository->findById($id);
     }
+
+    public function revisar(int $id, string $observacao_revisao)
+    {
+        return $this->orcamentoRepository->revisar($id, $observacao_revisao);
+    }
 }

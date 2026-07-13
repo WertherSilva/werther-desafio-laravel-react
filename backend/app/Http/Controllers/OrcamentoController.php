@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrcamentoRevisarRequest;
 use App\Services\OrcamentoService;
 use App\Http\Resources\Orcamento\OrcamentoResource;
 use App\Http\Requests\OrcamentoSearchRequest;
@@ -26,5 +27,15 @@ class OrcamentoController extends Controller
         $result = $this->orcamentoService->findById($id);
         
         return new OrcamentoWithContratosResource($result);
+    }
+
+    public function revisar(int $id, OrcamentoRevisarRequest $request)
+    {
+        $result = $this->orcamentoService->revisar($id, $request->validated('observacao_revisao'));
+
+        return response()->json([
+            'data' => new OrcamentoResource($result),
+            'message' => 'Orçamento revisado com sucesso.'
+        ]);
     }
 }
