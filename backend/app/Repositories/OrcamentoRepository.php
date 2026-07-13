@@ -16,12 +16,9 @@ class OrcamentoRepository
         return Orcamento::query()
             ->withDotacaoAtualizada()
             ->with([
-                'unidadeGestora',
-                'orgao',
-                'acao',
-                'programa',
-                'subfuncao',
-                'funcao',
+                'unidadeGestora.orgao',
+                'acao.programa',
+                'subfuncao.funcao',
                 'naturezaDespesa',
                 'fonteRecurso',
                 'revisor',
@@ -44,7 +41,7 @@ class OrcamentoRepository
             )
             ->when(
                 !empty($filters['status']),
-                fn (Builder $query) => $query->porStatus($filters['status'])
+                fn (Builder $query) => $query->porStatus(OrcamentoStatus::from($filters['status']))
             )
             ->when(
                 isset($filters['percentual_minimo']) || isset($filters['percentual_maximo']),
