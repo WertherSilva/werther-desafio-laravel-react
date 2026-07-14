@@ -2,6 +2,40 @@
 
 set -e
 
+cd /app/backend
+
+echo "Preparando o backend..."
+
+if [ ! -f vendor/autoload.php ]; then
+	echo "Instalando dependências do Composer..."
+
+	composer install \
+		--no-interaction \
+		--prefer-dist
+fi
+
+if [ ! -f .env ]; then
+	echo "Criando .env a partir do .env.example..."
+	cp .env.example .env
+fi
+
+php artisan config:clear
+
+if ! grep -q "^APP_KEY=.\+" .env; then
+	echo "Gerando APP_KEY..."
+	php artisan key:generate --force
+else
+	echo "APP_KEY já existe."
+fi
+
+if ! grep -q "^JWT_SECRET=.\+" .env; then
+	echo "Gerando JWT_SECRET..."
+	php artisan jwt:secret --force
+else
+	echo "JWT_SECRET já existe."
+fi
+
+
 echo "Aguardando conexão com o banco de dados..."
 
 count=0
@@ -17,21 +51,14 @@ done
 
 LOCK_FILE="/app/backend/storage/app/.seeded"
 
-# echo "Limpando todo o banco de dados e removendo arquivo .seeded"
-# php artisan db:wipe
-# if [ -f "$LOCK_FILE" ]; then
-#     rm "$LOCK_FILE"
-# fi
+echo "Limpando todo o banco de dados:"
+php artisan db:wipe
 
 echo "Banco de dados conectado. Rodando migrations..."
 php artisan migrate --force
 
-if [ ! -f "$LOCK_FILE" ]; then
-    echo "Primeira execução detectada. Rodando seeders..."
-    php artisan db:seed --force
-    touch "$LOCK_FILE"
-else
-    echo "Seeders já executados."
-fi
+php artisan optimize:clear
+
+php artisan db:seed --force
 
 exec "$@"

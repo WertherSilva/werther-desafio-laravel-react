@@ -6,8 +6,8 @@ services:
     environment:
       DB_HOST: mysql
       DB_DATABASE: seplag
-      DB_USERNAME: root
-      DB_PASSWORD: root
+      DB_USERNAME: seplag
+      DB_PASSWORD: seplag
     ports:
       - 8000:8000
     volumes:
@@ -37,8 +37,8 @@ services:
     image: mysql:8.4
     environment:
       MYSQL_DATABASE: 'seplag'
-      # MYSQL_USER: 'root'
-      # MYSQL_PASSWORD: 'root'
+      MYSQL_USER: 'seplag'
+      MYSQL_PASSWORD: 'seplag'
       MYSQL_ROOT_PASSWORD: 'root'
     ports:
       - "3306:3306"
