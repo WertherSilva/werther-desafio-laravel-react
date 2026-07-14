@@ -135,16 +135,26 @@ export default function Contratos() {
 	}
 
 	function formatarMoeda(
-		valor: number | null | undefined
+	valor: number | string | null | undefined
 	) {
-		if (valor === null || valor === undefined) {
-			return "Informação não disponível.";
+		if (
+			valor === null ||
+			valor === undefined ||
+			valor === ""
+		) {
+			return null;
 		}
 
-		return valor.toLocaleString("pt-BR", {
+		const valorNumerico = Number(valor);
+
+		if (Number.isNaN(valorNumerico)) {
+			return null;
+		}
+
+		return new Intl.NumberFormat("pt-BR", {
 			style: "currency",
 			currency: "BRL",
-		});
+		}).format(valorNumerico);
 	}
 
 	function formatarData(
@@ -526,15 +536,8 @@ export default function Contratos() {
 						</span>
 
 						<span className="text-body-secondary">
-							Ordenação:{" "}
-							{nomeOrdenacao(
-								filtrosAplicados.sortBy
-							)}{" "}
-							—{" "}
-							{filtrosAplicados.sortDirection ===
-							"asc"
-								? "crescente"
-								: "decrescente"}
+							Página {contratos.meta.current_page} de{" "}
+							{contratos.meta.last_page}
 						</span>
 					</div>
 
@@ -591,6 +594,12 @@ export default function Contratos() {
 												<strong>
 													{formatarMoeda(
 														contrato.valor
+													) ?? (
+														<span className="text-warning fw-semibold">
+															Informação
+															não
+															disponível.
+														</span>
 													)}
 												</strong>
 											</div>

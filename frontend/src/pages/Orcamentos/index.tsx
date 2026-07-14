@@ -144,15 +144,27 @@ export default function Orcamentos() {
 		setFiltrosAplicados(filtrosIniciais);
 	}
 
-	function formatarMoeda(valor: number | null | undefined) {
-		if (valor === null || valor === undefined) {
-			return "Informação não disponível.";
+	function formatarMoeda(
+		valor: number | string | null | undefined
+	) {
+		if (
+			valor === null ||
+			valor === undefined ||
+			valor === ""
+		) {
+			return null;
 		}
 
-		return valor.toLocaleString("pt-BR", {
+		const valorNumerico = Number(valor);
+
+		if (Number.isNaN(valorNumerico)) {
+			return null;
+		}
+
+		return new Intl.NumberFormat("pt-BR", {
 			style: "currency",
 			currency: "BRL",
-		});
+		}).format(valorNumerico);
 	}
 
 	function formatarStatus(status: OrcamentoStatus) {
@@ -649,6 +661,12 @@ export default function Orcamentos() {
 												<strong>
 													{formatarMoeda(
 														orcamento.dotacao_atualizada
+													) ?? (
+														<span className="text-warning fw-semibold">
+															Informação
+															não
+															disponível.
+														</span>
 													)}
 												</strong>
 											</div>
@@ -661,6 +679,12 @@ export default function Orcamentos() {
 												<strong>
 													{formatarMoeda(
 														orcamento.valor_pago
+													) ?? (
+														<span className="text-warning fw-semibold">
+															Informação
+															não
+															disponível.
+														</span>
 													)}
 												</strong>
 											</div>
@@ -673,6 +697,12 @@ export default function Orcamentos() {
 												<strong>
 													{formatarMoeda(
 														orcamento.saldo
+													) ?? (
+														<span className="text-warning fw-semibold">
+															Informação
+															não
+															disponível.
+														</span>
 													)}
 												</strong>
 											</div>
@@ -685,9 +715,7 @@ export default function Orcamentos() {
 												</small>
 
 												<small>
-													{
-														orcamento.percentual_execucao
-													}
+													{Number(orcamento.percentual_execucao).toFixed(2)}
 													%
 												</small>
 											</div>
