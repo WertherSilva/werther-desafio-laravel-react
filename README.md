@@ -1,8 +1,78 @@
 # Execução Local
 
-O Docker já possui todas as dependências necessárias para que a aplicação seja executada na máquina (PHP 8.3, Node 22 e MySQL). Em adição, foi criado um script que na primeira execução roda os seeders que populam o banco de dados, além de instalar as dependências do frontend e deixar as aplicações backend e frontend online.
+O repositório foi devidamente conteinerizado, possuindo todas as dependências necessárias para que a aplicação seja executada na máquina (PHP 8.3, Node 22 e MySQL). Em adição, foi criado um script que na primeira execução roda os seeders que populam o banco de dados, além de instalar as dependências do frontend e deixar as aplicações backend e frontend online.
 
-Assim, após executar o docker compose up, para acessar a aplicação, basta acessar o endereço http://localhost:3000/.
+### 1. Instalação do Docker
+
+Para ser possível carregar as imagens do Docker configuradas no repositório, inicialmente é necessário instalar o Docker.
+
+Abaixo se encontram os comandos para realizar a instalação no Ubuntu 24.04:
+
+-  **Instalar dependências do Docker**
+
+```bash
+sudo apt install -y ca-certificates curl gnupg
+```
+
+- **Adicionar o repositório oficial do Docker**
+
+```bash
+# Adiciona a chave GPG oficial
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Adiciona o repositório
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update
+```
+
+
+- **Instalar Docker Engine + Compose plugin**
+
+```bash
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+
+- **Rodar Docker sem `sudo` (recomendado)**
+
+```bash
+sudo usermod -aG docker $USER
+sudo reboot
+```
+
+
+### 2. Instalação do Git e Clone do Repositório
+
+Com o Docker instalado e a máquina reiniciada, é necessário instalar o git:
+
+```bash
+sudo apt update
+sudo apt install git
+```
+
+Após isso, clone este repositório:
+
+```bash
+cd ~
+git clone https://github.com/WertherSilva/werther-desafio-laravel-react.git
+```
+
+Então, monte os volumes do Docker:
+
+```bash
+cd werther-desafio-laravel-react/
+docker compose up --build
+```
+
+Por fim, após finalizar o processo, basta visitar o seguinte endereço para acessar a aplicação:
+
+http://localhost:3000/.
 
 
 # Escolha do Banco de Dados
